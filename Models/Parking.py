@@ -1,7 +1,7 @@
 class Parking():
-    def __init__(self, lista_motos, lista_coches, lista_minusvalidos):
-        self.__lista_motos = lista_motos
+    def __init__(self, lista_coches, lista_motos, lista_minusvalidos):
         self.__lista_coches = lista_coches
+        self.__lista_motos = lista_motos
         self.__lista_minusvalidos = lista_minusvalidos
 
     @property
@@ -27,3 +27,12 @@ class Parking():
     @lista_minusvalidos.setter
     def lista_minusvalidos(self, lista_minusvalidos):
         self.__lista_minusvalidos = lista_minusvalidos
+
+    def __str__(self):
+        for i in self.lista_coches:
+            print(i)
+        for i in self.lista_motos:
+            print(i)
+        for i in self.lista_minusvalidos:
+            print(i)
+        return ""

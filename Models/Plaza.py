@@ -36,3 +36,6 @@ class Plaza():
     @reservada.setter
     def reservada(self, reservada):
         self.__reservada = reservada
+
+    def __str__(self):
+        return "(%s, %s, %s, %s)" %(self.num_plaza, self.vehiculo, self.ocupada, self.reservada)

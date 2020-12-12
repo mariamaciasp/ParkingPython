@@ -1,20 +1,11 @@
 class Vehiculo():
-    def __init__(self, id, matricula, tipo, num_plaza, pin, fecha_entrada, fecha_salida):
-        self.__id = id
+    def __init__(self, matricula, tipo, num_plaza, pin, fecha_entrada, fecha_salida):
         self.__matricula = matricula
         self.__tipo = tipo
         self.__num_plaza = num_plaza
         self.__pin = pin
         self.__fecha_entrada = fecha_entrada
         self.__fecha_salida = fecha_salida
-
-    @property
-    def id(self):
-        return self.__id
-
-    @id.setter
-    def id(self, id):
-        self.__id = id
 
     @property
     def matricula(self):
@@ -63,3 +54,6 @@ class Vehiculo():
     @fecha_salida.setter
     def fecha_salida(self, fecha_salida):
         self.__fecha_salida = fecha_salida
+
+    def __str__(self):
+        return "[%s, %s, %s, %s, %s, %s]" %(self.matricula, self.tipo, self.num_plaza, self.pin, self.fecha_entrada, self.fecha_salida)
