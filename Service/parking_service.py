@@ -27,8 +27,8 @@ class parking_service():
     def lista_precios(self, lista_precios):
         self.__lista_precios = lista_precios
 
-    def __str__(self):
-        return "%s" %(self.lista_precios)
+    #def __str__(self):
+    #    return "%s" %(self.lista_precios)
 
     # total 20 plazas, 14 coches, 3 minusválidos y 3 motos
 
@@ -125,6 +125,8 @@ class parking_service():
             print(buscar_vehiculo)
             self.calcular_precio(buscar_vehiculo)
             print(self.calcular_precio(buscar_vehiculo))
+            self.lista_precios.append(self.calcular_precio(buscar_vehiculo))
+            print(self.lista_precios)
             if (buscar_vehiculo.tipo == "coche"):
                 for i in self.parking.lista_coches:
                     if (i.vehiculo == buscar_vehiculo):
@@ -158,13 +160,9 @@ class parking_service():
         elif (vehiculo.tipo == "minusvalido"):
             precio = 0.10
 
-        precio_total = precio * minutos
+        precio_total = round(precio * minutos,2)
 
-        self.lista_precios.append(precio_total)
-        print(self.lista_precios)
+        #self.lista_precios.append(precio_total)
 
         return precio_total
 
-    def imprimir_lista_precios(self):
-
-        return self.lista_precios

@@ -29,8 +29,9 @@ if(op ==1):
     servicio_parking.retirar_vehiculo("10", 2,"1234", repositorio_vehiculo)
     servicio_parking.retirar_vehiculo("1", 15,"1234", repositorio_vehiculo)
     servicio_parking.retirar_vehiculo("2", 18,"1234", repositorio_vehiculo)
+
 print(parking)
-print(parking_service.lista_precios)
-print(parking_service.imprimir_lista_precios)
+
+print(servicio_parking.lista_precios)
 
 
