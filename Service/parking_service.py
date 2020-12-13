@@ -166,3 +166,7 @@ class parking_service():
 
         return precio_total
 
+
+    def ingresar_vehiculo_abonado(self, matricula, dni):
+        return
+

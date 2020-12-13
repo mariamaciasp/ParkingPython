@@ -13,3 +13,4 @@ class cliente_repository():
 
     def add_cliente(self, cliente):
         self.lista_clientes.append(cliente)
+

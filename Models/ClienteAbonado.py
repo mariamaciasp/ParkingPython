@@ -1,8 +1,10 @@
 from Models.Cliente import Cliente
 
+
 class ClienteAbonado(Cliente):
+
     def __init__(self, id, vehiculo, dni):
-        Cliente.__init__(id, vehiculo)
+        Cliente.__init__(self, id, vehiculo)
         self.__dni = dni
 
     @property
@@ -12,3 +14,6 @@ class ClienteAbonado(Cliente):
     @dni.setter
     def dni(self, dni):
         self.__dni = dni
+
+    def __str__(self):
+        return "%s, %s, %s" %(self.id, self.vehiculo, self.dni)
