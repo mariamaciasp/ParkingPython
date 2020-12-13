@@ -16,6 +16,7 @@ class vehiculo_repository():
 
     def buscar_vehiculo_matricula(self, matricula):
         for i in self.lista_vehiculos:
-            if(self.lista_vehiculos[i].matricula == matricula):
-                return
-        self.lista_vehiculos
+            if (i.matricula == matricula):
+                return i
+
+        return None
