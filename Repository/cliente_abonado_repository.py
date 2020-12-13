@@ -13,3 +13,8 @@ class cliente_abonado_repository():
 
     def add_cliente_abonado(self, cliente_abonado):
         self.lista_clientes_abonados.append(cliente_abonado)
+
+    def __str__(self):
+        for i in self.lista_clientes_abonados:
+            print(i)
+        return ""

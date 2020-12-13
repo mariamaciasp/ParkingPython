@@ -6,14 +6,21 @@ from Models.Vehiculo import Vehiculo
 from Repository.vehiculo_repository import vehiculo_repository
 from Repository.cliente_repository import cliente_repository
 from Repository.cliente_abonado_repository import cliente_abonado_repository
+from Repository.abono_repository import abono_repository
 from Service.vehiculo_service import vehiculo_service
+from Service.cliente_abonado_service import cliente_abonado_service
 
 parking = Parking([],[],[])
 repositorio_vehiculo = vehiculo_repository([])
 repositorio_cliente = cliente_repository([])
 repositorio_cliente_abonado = cliente_abonado_repository([])
+repositorio_abono = abono_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
+servicio_cliente_abonado = cliente_abonado_service([])
+servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","tarjeta","mensual","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking)
+print(repositorio_cliente_abonado)
+print(servicio_cliente_abonado.calcular_fecha_cancelacion("anual"))
 print(parking)
 
 id_cliente = 1
