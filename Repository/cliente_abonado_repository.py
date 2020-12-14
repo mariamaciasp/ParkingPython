@@ -18,3 +18,15 @@ class cliente_abonado_repository():
         for i in self.lista_clientes_abonados:
             print(i)
         return ""
+
+    def buscar_vehiculo_matricula_dni(self, matricula, dni):
+        for i in self.lista_clientes_abonados:
+            if(i.dni == dni and i.vehiculo.matricula == matricula):
+                return i.vehiculo
+        return None
+
+    def buscar_vehiculo_matricula(self, matricula):
+        for i in self.lista_clientes_abonados:
+            if(i.vehiculo.matricula == matricula):
+                return i.vehiculo
+        return None

@@ -116,6 +116,7 @@ class parking_service():
         else:
             print("No quedan plazas disponibles de " + tipo + "\n")
 
+
     def retirar_vehiculo(self, matricula, num_plaza, pin, vehiculo_repositorio):
 
         buscar_vehiculo = vehiculo_repositorio.buscar_vehiculo_matricula(matricula)
@@ -167,6 +168,38 @@ class parking_service():
         return precio_total
 
 
-    def ingresar_vehiculo_abonado(self, matricula, dni):
-        return
+    def ingresar_vehiculo_abonado(self, matricula, dni, cliente_abonado_repositorio):
 
+        vehiculo = cliente_abonado_repositorio.buscar_vehiculo_matricula_dni(matricula, dni)
+        #vehiculo_parking = self.encontrar_vehiculo_abonado_parking(matricula)
+        longitud_coches = len(self.parking.lista_coches)
+        longitud_motos = len(self.parking.lista_motos)
+        if(vehiculo != None):# and vehiculo_parking != None
+            #creo que lo mejor será pillar el tipo y a partir de ahí modificarlo directamente en la lista
+            if(vehiculo.tipo == "coche"):
+                self.parking.lista_coches[vehiculo.num_plaza -1].ocupada = True
+            if(vehiculo.tipo == "moto"):
+                self.parking.lista_motos[vehiculo.num_plaza -longitud_coches -1].ocupada = True
+            if(vehiculo.tipo == "minusvalido"):
+                self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = True
+
+    def retirar_vehiculo_abonado(self, matricula, num_plaza, pin, cliente_abonado_repositorio):
+        vehiculo = cliente_abonado_repositorio.buscar_vehiculo_matricula(matricula)
+        longitud_coches = len(self.parking.lista_coches)
+        longitud_motos = len(self.parking.lista_motos)
+        if(vehiculo != None and vehiculo.pin == pin and vehiculo.num_plaza == num_plaza):
+            if(vehiculo.tipo == "coche"):
+                self.parking.lista_coches[vehiculo.num_plaza -1].ocupada = False
+            if(vehiculo.tipo == "moto"):
+                self.parking.lista_motos[vehiculo.num_plaza -longitud_coches -1].ocupada = False
+            if(vehiculo.tipo == "minusvalido"):
+                self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = False
+
+
+
+#    def encontrar_vehiculo_abonado_parking(self, matricula):
+#        for i in self.parking:
+#            for j in i:
+#                if(j.vehiculo.matricula == matricula):
+#                    return j
+#        return None

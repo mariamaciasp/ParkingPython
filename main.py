@@ -18,11 +18,11 @@ repositorio_abono = abono_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
 servicio_cliente_abonado = cliente_abonado_service([])
-servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","tarjeta","mensual","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking)
+servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","tarjeta","mensual","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
 print(repositorio_cliente_abonado)
 print(servicio_cliente_abonado.calcular_fecha_cancelacion("anual"))
 print(parking)
-
+servicio_parking.ingresar_vehiculo_abonado("1234abc","dni",repositorio_cliente_abonado)
 id_cliente = 1
 servicio_parking.ingresar_vehiculo(1,"dfsadf","coche", repositorio_vehiculo, repositorio_cliente)
 servicio_parking.ingresar_vehiculo(2,"10","coche", repositorio_vehiculo, repositorio_cliente)
@@ -34,6 +34,7 @@ servicio_parking.ingresar_vehiculo(6,"2","minusvalido", repositorio_vehiculo, re
 servicio_parking.ingresar_vehiculo(6,"dfasdfssdfsdfasdfssadf","minusvalido", repositorio_vehiculo, repositorio_cliente)
 
 print(parking)
+servicio_parking.retirar_vehiculo_abonado("1234abc",1,"1234", repositorio_cliente_abonado)
 op = int(input("pulse 1"))
 if(op ==1):
     servicio_parking.retirar_vehiculo("dfsadf", 1,"1234", repositorio_vehiculo)

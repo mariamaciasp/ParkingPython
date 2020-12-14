@@ -18,5 +18,4 @@ class vehiculo_repository():
         for i in self.lista_vehiculos:
             if (i.matricula == matricula):
                 return i
-
         return None

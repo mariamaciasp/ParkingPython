@@ -16,15 +16,18 @@ class cliente_abonado_service():
         self.__abonados = abonados
 
     def dar_alta_abonado(self, id_cliente, matricula, dni, tarjeta, tipo_abono, tipo_plaza,
-                         cliente_abonado_repositorio, abono_repositorio, servicio_parking):
+                         cliente_abonado_repositorio, abono_repositorio, servicio_parking, vehiculo_repositorio):
 
         if(servicio_parking.plaza_disponible(tipo_plaza)!= -1):
             nuevo_vehiculo = Vehiculo(matricula, tipo_plaza, servicio_parking.plaza_disponible(tipo_plaza),"1234", None, None)
             nuevo_cliente_abonado = ClienteAbonado(id_cliente, nuevo_vehiculo, dni)
             nuevo_abono = Abono(nuevo_cliente_abonado, tarjeta, tipo_abono, datetime.now(), self.calcular_fecha_cancelacion(tipo_abono))
 
+            vehiculo_repositorio.add_vehiculo(nuevo_vehiculo)
             cliente_abonado_repositorio.add_cliente_abonado(nuevo_cliente_abonado)
             abono_repositorio.add_abono(nuevo_abono)
+            self.asignar_plaza_abonado(servicio_parking, tipo_plaza, nuevo_vehiculo)
+
             return True
 
         else:
@@ -69,3 +72,25 @@ class cliente_abonado_service():
 
         return fecha_finalizacion
 
+
+    def asignar_plaza_abonado(self, servicio_parking, tipo_plaza, vehiculo):
+
+        if(servicio_parking.plaza_disponible(tipo_plaza)!= -1):
+            longitud_coches = len(servicio_parking.parking.lista_coches)
+            longitud_motos = len(servicio_parking.parking.lista_motos)
+
+            if (tipo_plaza == "coche"):
+                servicio_parking.parking.lista_coches[vehiculo.num_plaza - 1].vehiculo = vehiculo
+                servicio_parking.parking.lista_coches[vehiculo.num_plaza - 1].reservada = True
+
+            elif (tipo_plaza == "moto"):
+                servicio_parking.parking.lista_motos[vehiculo.num_plaza - longitud_coches - 1].vehiculo = vehiculo
+                servicio_parking.parking.lista_motos[vehiculo.num_plaza - longitud_coches - 1].ocupada = True
+
+            elif (tipo_plaza == "minusvalido"):
+                servicio_parking.parking.lista_minusvalidos[
+                    vehiculo.num_plaza - longitud_coches - longitud_motos - 1].vehiculo = vehiculo
+                servicio_parking.parking.lista_minusvalidos[
+                    vehiculo.num_plaza - longitud_coches - longitud_motos - 1].ocupada = True
+            else:
+                print("Tipo incorrecto")
