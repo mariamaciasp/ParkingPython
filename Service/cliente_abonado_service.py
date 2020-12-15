@@ -108,13 +108,10 @@ class cliente_abonado_service():
             print("Cliente incorrecto")
             return False
 
-
-
     def modificar_abono(self, dni_cliente, abono_repositorio):
         abono = abono_repositorio.buscar_abono(dni_cliente)
         abono.fecha_cancelacion = self.calcular_fecha_cancelacion(abono.cliente.tipo_abono, abono.fecha_cancelacion)
         print(abono)
-        return abono
 
     def baja_abono(self, dni_cliente, abono_repositorio, cliente_abonado_repositorio):
         abono_repositorio.borrar_abono(dni_cliente)
