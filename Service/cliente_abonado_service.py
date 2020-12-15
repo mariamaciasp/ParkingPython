@@ -15,13 +15,13 @@ class cliente_abonado_service():
     def abonados(self, abonados):
         self.__abonados = abonados
 
-    def dar_alta_abonado(self, id_cliente, matricula, dni, tarjeta, tipo_abono, tipo_plaza,
+    def dar_alta_abonado(self, id_cliente, matricula, dni, nombre, apellidos, email, tarjeta, tipo_abono, tipo_plaza,
                          cliente_abonado_repositorio, abono_repositorio, servicio_parking, vehiculo_repositorio):
 
         if(servicio_parking.plaza_disponible(tipo_plaza)!= -1):
             nuevo_vehiculo = Vehiculo(matricula, tipo_plaza, servicio_parking.plaza_disponible(tipo_plaza),"1234", None, None)
-            nuevo_cliente_abonado = ClienteAbonado(id_cliente, nuevo_vehiculo, dni)
-            nuevo_abono = Abono(nuevo_cliente_abonado, tarjeta, tipo_abono, datetime.now(), self.calcular_fecha_cancelacion(tipo_abono))
+            nuevo_cliente_abonado = ClienteAbonado(id_cliente, nuevo_vehiculo, dni, nombre, apellidos, tarjeta, tipo_abono, email)
+            nuevo_abono = Abono(nuevo_cliente_abonado, datetime.now(), self.calcular_fecha_cancelacion(tipo_abono, datetime.now()))
 
             vehiculo_repositorio.add_vehiculo(nuevo_vehiculo)
             cliente_abonado_repositorio.add_cliente_abonado(nuevo_cliente_abonado)
@@ -35,9 +35,7 @@ class cliente_abonado_service():
             return False
 
 
-    def calcular_fecha_cancelacion(self, tipo_abono):
-
-        fecha_finalizacion = datetime.now()
+    def calcular_fecha_cancelacion(self, tipo_abono, fecha_finalizacion):
 
         if(tipo_abono == "mensual"):
 
@@ -94,3 +92,27 @@ class cliente_abonado_service():
                     vehiculo.num_plaza - longitud_coches - longitud_motos - 1].ocupada = True
             else:
                 print("Tipo incorrecto")
+
+
+    def modificar_datos_abonado(self, dni, nuevo_dni, nombre, apellidos, tarjeta, email, cliente_abonado_repositorio):
+        cliente = cliente_abonado_repositorio.buscar_cliente_dni(dni)
+
+        if(cliente != None):
+            cliente.dni = nuevo_dni
+            cliente.nombre = nombre
+            cliente.apellidos = apellidos
+            cliente.num_tarjeta = tarjeta
+            cliente.email = email
+            return True
+        else:
+            print("Cliente incorrecto")
+            return False
+
+    def modificar_abono(self, dni_cliente, abono_repositorio):
+        abono = abono_repositorio.buscar_abono(dni_cliente)
+        abono.fecha_cancelacion = self.calcular_fecha_cancelacion(abono.cliente.tipo_abono, abono.fecha_cancelacion)
+        print(abono)
+
+    def baja_abono(self, dni_cliente, abono_repositorio, cliente_abonado_repositorio):
+        abono_repositorio.borrar_abono(dni_cliente)
+        cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)

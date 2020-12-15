@@ -30,3 +30,16 @@ class cliente_abonado_repository():
             if(i.vehiculo.matricula == matricula):
                 return i.vehiculo
         return None
+
+    def buscar_cliente_dni(self, dni):
+        for i in self.lista_clientes_abonados:
+            if(i.dni == dni):
+                return i
+        return None
+
+    def borrar_cliente_dni(self, dni):
+        cliente = self.buscar_cliente_dni(dni)
+        if(cliente!=None):
+            self.lista_clientes_abonados.remove(cliente)
+            return True
+        return False
