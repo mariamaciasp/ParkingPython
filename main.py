@@ -11,6 +11,7 @@ from Repository.abono_repository import abono_repository
 from Repository.facturacion_abonos_repository import facturacion_abonos_repository
 from Service.vehiculo_service import vehiculo_service
 from Service.cliente_abonado_service import cliente_abonado_service
+from Service.abono_service import abono_service
 from datetime import datetime
 
 parking = Parking([],[],[])
@@ -22,6 +23,7 @@ repositorio_facturacion = facturacion_abonos_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
 servicio_cliente_abonado = cliente_abonado_service([])
+servicio_abono = abono_service()
 servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","María","Macías","maria@mail.com","tarjeta","trimestral","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
 print(repositorio_cliente_abonado)
 #print(servicio_cliente_abonado.calcular_fecha_cancelacion("anual", datetime.now()) )
@@ -57,6 +59,9 @@ cliente_abonado_1 = ClienteAbonado(1, vehiculo_abonado_1, "44243716L","María","
 abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_1))
 repositorio_abono.add_abono(abono_prueba)
 repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(2))
+#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(28))
+#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(2021))
 
 print(repositorio_cliente_abonado)
 
@@ -72,3 +77,9 @@ print(repositorio_abono)
 print()
 print(repositorio_cliente_abonado)
 print(repositorio_facturacion)
+
+print("caducidad por mes")
+servicio_abono.caducidad_abono_mes(repositorio_abono, 1)
+print("fin caducidad mes")
+
+servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
