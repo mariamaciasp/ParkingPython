@@ -8,7 +8,7 @@ from Repository.vehiculo_repository import vehiculo_repository
 from Repository.cliente_repository import cliente_repository
 from Repository.cliente_abonado_repository import cliente_abonado_repository
 from Repository.abono_repository import abono_repository
-from Repository.facturacion_repository import facturacion_repository
+from Repository.facturacion_abonos_repository import facturacion_abonos_repository
 from Service.vehiculo_service import vehiculo_service
 from Service.cliente_abonado_service import cliente_abonado_service
 from datetime import datetime
@@ -18,7 +18,7 @@ repositorio_vehiculo = vehiculo_repository([])
 repositorio_cliente = cliente_repository([])
 repositorio_cliente_abonado = cliente_abonado_repository([])
 repositorio_abono = abono_repository([])
-repositorio_facturacion = facturacion_repository([])
+repositorio_facturacion = facturacion_abonos_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
 servicio_cliente_abonado = cliente_abonado_service([])

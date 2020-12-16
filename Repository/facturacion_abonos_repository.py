@@ -1,4 +1,4 @@
-class facturacion_repository():
+class facturacion_abonos_repository():
 
     def __init__(self, lista_facturacion):
         self.__lista_facturacion = lista_facturacion
