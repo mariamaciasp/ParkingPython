@@ -59,8 +59,8 @@ cliente_abonado_1 = ClienteAbonado(1, vehiculo_abonado_1, "44243716L","María","
 abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_1))
 repositorio_abono.add_abono(abono_prueba)
 repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
-#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(2))
-#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(28))
+abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(12))
+abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(16))
 #abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(2021))
 
 print(repositorio_cliente_abonado)
@@ -82,4 +82,6 @@ print("caducidad por mes")
 servicio_abono.caducidad_abono_mes(repositorio_abono, 1)
 print("fin caducidad mes")
 
-servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
+#servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
+print("2.0")
+print(servicio_abono.caducidad_proximos_10_dias_timedelta(repositorio_abono))
