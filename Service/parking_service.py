@@ -7,9 +7,9 @@ from Service.vehiculo_service import vehiculo_service
 
 
 class parking_service():
-    def __init__(self, parking, lista_precios):
+    def __init__(self, parking, facturacion_no_abonados):
         self.__parking = parking
-        self.__lista_precios = lista_precios
+        self.__facturacion_no_abonados = facturacion_no_abonados
 
     @property
     def parking(self):
@@ -20,15 +20,15 @@ class parking_service():
         self.__parking = parking
 
     @property
-    def lista_precios(self):
-        return self.__lista_precios
+    def facturacion_no_abonados(self):
+        return self.__facturacion_no_abonados
 
-    @lista_precios.setter
-    def lista_precios(self, lista_precios):
-        self.__lista_precios = lista_precios
+    @facturacion_no_abonados.setter
+    def facturacion_no_abonados(self, facturacion_no_abonados):
+        self.__facturacion_no_abonados = facturacion_no_abonados
 
     #def __str__(self):
-    #    return "%s" %(self.lista_precios)
+    #    return "%s" %(self.facturacion_no_abonados)
 
     # total 20 plazas, 14 coches, 3 minusválidos y 3 motos
 
@@ -122,12 +122,15 @@ class parking_service():
         buscar_vehiculo = vehiculo_repositorio.buscar_vehiculo_matricula(matricula)
 
         if (buscar_vehiculo != None and buscar_vehiculo.num_plaza == num_plaza and buscar_vehiculo.pin == pin):
-            buscar_vehiculo.fecha_salida = datetime.now()
+            salida = buscar_vehiculo.fecha_salida = datetime.now()
             print(buscar_vehiculo)
             self.calcular_precio(buscar_vehiculo)
             print(self.calcular_precio(buscar_vehiculo))
-            self.lista_precios.append(self.calcular_precio(buscar_vehiculo))
-            print(self.lista_precios)
+
+            factura_vehiculo = [buscar_vehiculo.fecha_entrada, salida, self.calcular_precio(buscar_vehiculo)]
+            self.facturacion_no_abonados.append(factura_vehiculo)
+
+            print(self.facturacion_no_abonados)
             if (buscar_vehiculo.tipo == "coche"):
                 for i in self.parking.lista_coches:
                     if (i.vehiculo == buscar_vehiculo):
@@ -163,7 +166,7 @@ class parking_service():
 
         precio_total = round(precio * minutos,2)
 
-        #self.lista_precios.append(precio_total)
+        #self.facturacion_no_abonados.append(precio_total)
 
         return precio_total
 
@@ -196,10 +199,52 @@ class parking_service():
                 self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = False
 
 
+    def consultar_facturacion_fechas(self, fecha1, fecha2):
+        lista_facturacion_fechas = []
+        for i in self.facturacion_no_abonados:
+            if(fecha1<=i[1]<=fecha2):
+                lista_facturacion_fechas.append(i)
 
-#    def encontrar_vehiculo_abonado_parking(self, matricula):
-#        for i in self.parking:
-#            for j in i:
-#                if(j.vehiculo.matricula == matricula):
-#                    return j
-#        return None
+        if(len(lista_facturacion_fechas)!=0):
+            for i in lista_facturacion_fechas:
+                print(i)
+        else:
+            print("No hay registros de facturación en el rango de fechas seleccionado")
+
+    def consultar_estado_parking(self):
+        libre = 0
+        ocupada = 0
+        abono_libre = 0
+        abono_ocupada = 0
+
+        for i in self.parking.lista_coches:
+            if(i.ocupada == False and i.reservada == False):
+                libre += 1
+            elif(i.ocupada == True and i.reservada == False):
+                ocupada += 1
+            elif(i.ocupada == False and i.reservada == True):
+                abono_libre += 1
+            else:
+                abono_ocupada += 1
+        for i in self.parking.lista_motos:
+            if(i.ocupada == False and i.reservada == False):
+                libre += 1
+            elif(i.ocupada == True and i.reservada == False):
+                ocupada += 1
+            elif(i.ocupada == False and i.reservada == True):
+                abono_libre += 1
+            else:
+                abono_ocupada += 1
+
+        for i in self.parking.lista_minusvalidos:
+            if(i.ocupada == False and i.reservada == False):
+                libre += 1
+            elif(i.ocupada == True and i.reservada == False):
+                ocupada += 1
+            elif(i.ocupada == False and i.reservada == True):
+                abono_libre += 1
+            else:
+                abono_ocupada += 1
+
+        print(f"Plazas libres: {libre} \nPlazas ocupadas: {ocupada} \nPlazas abono libre: {abono_libre} "
+              f"\nPlazas abono ocupada: {abono_ocupada}")

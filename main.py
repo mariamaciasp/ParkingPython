@@ -29,6 +29,7 @@ print(repositorio_cliente_abonado)
 #print(servicio_cliente_abonado.calcular_fecha_cancelacion("anual", datetime.now()) )
 print(parking)
 servicio_parking.ingresar_vehiculo_abonado("1234abc","dni",repositorio_cliente_abonado)
+servicio_parking.consultar_estado_parking()
 id_cliente = 1
 servicio_parking.ingresar_vehiculo(1,"dfsadf","coche", repositorio_vehiculo, repositorio_cliente)
 servicio_parking.ingresar_vehiculo(2,"10","coche", repositorio_vehiculo, repositorio_cliente)
@@ -44,6 +45,7 @@ servicio_cliente_abonado.modificar_datos_abonado("dni", "dni2", "Pepe", "Botella
 print(repositorio_cliente_abonado)
 print(parking)
 servicio_parking.retirar_vehiculo_abonado("1234abc",1,"1234", repositorio_cliente_abonado)
+
 op = int(input("pulse 1"))
 if(op ==1):
     servicio_parking.retirar_vehiculo("dfsadf", 1,"1234", repositorio_vehiculo)
@@ -53,14 +55,15 @@ if(op ==1):
 
 print(parking)
 
-print(servicio_parking.lista_precios)
+print(servicio_parking.facturacion_no_abonados)
 vehiculo_abonado_1 = Vehiculo("dfsadf","coche", 5, "1234", None, None)
 cliente_abonado_1 = ClienteAbonado(1, vehiculo_abonado_1, "44243716L","María","Padilla","tarjeta2","mensual","asfd", [])
 abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_1))
 repositorio_abono.add_abono(abono_prueba)
 repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+
 abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(12))
-abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(22))
+abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(1))
 abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(2020))
 
 print(repositorio_cliente_abonado)
@@ -84,4 +87,18 @@ print("fin caducidad mes")
 
 #servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
 print("2.0")
-print(servicio_abono.caducidad_proximos_10_dias_timedelta(repositorio_abono))
+servicio_abono.caducidad_proximos_10_dias_timedelta(repositorio_abono)
+
+print("imprimir abonos")
+print(servicio_cliente_abonado)
+
+servicio_cliente_abonado.consulta_abonos_anual()
+print()
+fecha1 = datetime(2020, 12, 17, 13, 56)
+print(fecha1)
+fecha2 = datetime(2020, 12, 17, 14)
+print(fecha2)
+servicio_parking.consultar_facturacion_fechas(fecha1,fecha2)
+print()
+print(parking)
+servicio_parking.consultar_estado_parking()

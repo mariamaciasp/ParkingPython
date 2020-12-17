@@ -16,6 +16,11 @@ class cliente_abonado_service():
     def abonados(self, abonados):
         self.__abonados = abonados
 
+    def __str__(self):
+        for i in self.abonados:
+            print(i)
+        return ""
+
     def dar_alta_abonado(self, id_cliente, matricula, dni, nombre, apellidos, email, tarjeta, tipo_abono, tipo_plaza,
                          cliente_abonado_repositorio, abono_repositorio, servicio_parking, vehiculo_repositorio):
 
@@ -44,6 +49,8 @@ class cliente_abonado_service():
 
         if(tipo_abono == "mensual"):
             cliente.facturado.append(precio_mesual)
+            calculo_abono = [cliente.dni, fecha_finalizacion, precio_mesual]
+            self.abonados.append(calculo_abono)
             if(fecha_finalizacion.month == 12):
                 fecha_finalizacion = fecha_finalizacion.replace(year=(fecha_finalizacion.year+1))
                 fecha_finalizacion = fecha_finalizacion.replace(month=1)
@@ -52,6 +59,8 @@ class cliente_abonado_service():
 
         if(tipo_abono == "trimestral"):
             cliente.facturado.append(precio_trimestral)
+            calculo_abono = [cliente.dni, fecha_finalizacion, precio_trimestral]
+            self.abonados.append(calculo_abono)
             if(fecha_finalizacion.month >= 10):
                 fecha_finalizacion = fecha_finalizacion.replace(year=(fecha_finalizacion.year+1))
 
@@ -66,6 +75,8 @@ class cliente_abonado_service():
 
         if(tipo_abono == "semestral"):
             cliente.facturado.append(precio_semestral)
+            calculo_abono = [cliente.dni, fecha_finalizacion, precio_semestral]
+            self.abonados.append(calculo_abono)
             if(fecha_finalizacion.month >= 7):
                 fecha_finalizacion = fecha_finalizacion.replace(month=(fecha_finalizacion.month-6))
                 fecha_finalizacion = fecha_finalizacion.replace(year=(fecha_finalizacion.year+1))
@@ -74,6 +85,8 @@ class cliente_abonado_service():
 
         if(tipo_abono == "anual"):
             cliente.facturado.append(precio_anual)
+            calculo_abono = [cliente.dni, fecha_finalizacion, precio_semestral]
+            self.abonados.append(calculo_abono)
             fecha_finalizacion = fecha_finalizacion.replace(year=(fecha_finalizacion.year+1))
 
         return fecha_finalizacion
@@ -138,3 +151,16 @@ class cliente_abonado_service():
         abono_repositorio.borrar_abono(dni_cliente)
         cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)
 
+    def consulta_abonos_anual(self):
+        anio_actual = datetime.now().year
+        lista_anuales = []
+
+        for i in self.abonados:
+            if(i[1].year == anio_actual):
+                lista_anuales.append(i)
+
+        if(len(lista_anuales) != 0):
+            for i in lista_anuales:
+                print(i)
+        else:
+            print("No existen registros en el año actual")
