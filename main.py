@@ -13,12 +13,18 @@ from Service.vehiculo_service import vehiculo_service
 from Service.cliente_abonado_service import cliente_abonado_service
 from Service.abono_service import abono_service
 from datetime import datetime
+import pickle
 
 parking = Parking([],[],[])
 repositorio_vehiculo = vehiculo_repository([])
 repositorio_cliente = cliente_repository([])
 repositorio_cliente_abonado = cliente_abonado_repository([])
-repositorio_abono = abono_repository([])
+
+bbdd_abono_repositorio = open("./DataBase/abono", "wb")
+pickle.dump([], bbdd_abono_repositorio)
+bbdd_abono_repositorio.close()
+repositorio_abono = abono_repository()
+
 repositorio_facturacion = facturacion_abonos_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
@@ -26,7 +32,7 @@ servicio_cliente_abonado = cliente_abonado_service([])
 servicio_abono = abono_service()
 servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","María","Macías","maria@mail.com","tarjeta","trimestral","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
 print(repositorio_cliente_abonado)
-#print(servicio_cliente_abonado.calcular_fecha_cancelacion("anual", datetime.now()) )
+
 print(parking)
 servicio_parking.ingresar_vehiculo_abonado("1234abc","dni",repositorio_cliente_abonado)
 servicio_parking.consultar_estado_parking()
@@ -68,26 +74,26 @@ abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(20
 
 print(repositorio_cliente_abonado)
 
-servicio_cliente_abonado.modificar_abono("dni2", repositorio_abono)
+##servicio_cliente_abonado.modificar_abono("dni2", repositorio_abono)
 print("1")
 print(repositorio_cliente_abonado)
 print("aqui")
 print(repositorio_abono)
-servicio_cliente_abonado.baja_abono("dni2", repositorio_abono, repositorio_cliente_abonado, repositorio_facturacion)
+##servicio_cliente_abonado.baja_abono("dni2", repositorio_abono, repositorio_cliente_abonado, repositorio_facturacion)
 repositorio_abono.borrar_abono("dni2")
 print("ahora")
-print(repositorio_abono)
+##print(repositorio_abono)
 print()
 print(repositorio_cliente_abonado)
 print(repositorio_facturacion)
 
 print("caducidad por mes")
-servicio_abono.caducidad_abono_mes(repositorio_abono, 1)
+##servicio_abono.caducidad_abono_mes(repositorio_abono, 1)
 print("fin caducidad mes")
 
-#servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
+##servicio_abono.caducidad_proximos_10_dias(repositorio_abono)
 print("2.0")
-servicio_abono.caducidad_proximos_10_dias_timedelta(repositorio_abono)
+##servicio_abono.caducidad_proximos_10_dias_timedelta(repositorio_abono)
 
 print("imprimir abonos")
 print(servicio_cliente_abonado)
