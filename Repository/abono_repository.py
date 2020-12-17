@@ -26,9 +26,10 @@ class abono_repository():
         self.lista_abonos = open("./DataBase/abono", "rb")
 
     def buscar_abono(self, dni):
-        self.lista_abonos.close()
+        #self.lista_abonos.close()
         #datos_abono = open('./DataBase/abono','r')
             #pickle.load(open("./DataBase/abono", "r"))
+        #datos2 = pickle.load(self.lista_abonos)
         #lista = datos_abono.readlines()
         print("AQUI")
         #print(datos_abono)
