@@ -124,29 +124,18 @@ class abono_service():
         proximos_10_dias = timedelta(days=10)
         lista_caducidad = []
         fecha_actual = datetime.now()
-        fecha_actual = fecha_actual.replace(day=28)
+        #fecha_actual = fecha_actual.replace(day=21)
+        #fecha_actual = fecha_actual.replace(month=12)
+        #fecha_actual = fecha_actual.replace(year=2021)
         final_caducidad = fecha_actual + proximos_10_dias
 
         for i in abono_repository.lista_abonos:
-            if(i.fecha_cancelacion >= final_caducidad):
-                print("holsadfkasdklfla")
-                print(i.fecha_cancelacion)
+            print(i.fecha_cancelacion)
+            if(final_caducidad>=i.fecha_cancelacion>=fecha_actual):
+                lista_caducidad.append(i)
 
-
-    #        resta_fechas = fecha_actual - i.fecha_cancelacion.day
-     #       lista_caducidad.append(resta_fechas)
-
-            #if((i.fecha_cancelacion-fecha_actual).day >= 0 or proximos_10_dias-i.fecha_cancelacion>=0):
-            #if(fecha_actual<=i.fecha_cancelacion<=proximos_10_dias):
-             #   lista_caducidad.append(i)
-
-#        if(len(lista_caducidad) != 0):
- #           for i in lista_caducidad:
-  #              print(i)
-   #     else:
+        if(len(lista_caducidad) != 0):
+            for i in lista_caducidad:
+                print(i)
+        else:
             print("No existen abonos con esa fecha de caducidad")
-
-        return final_caducidad
-
-
-

@@ -60,8 +60,8 @@ abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado
 repositorio_abono.add_abono(abono_prueba)
 repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
 abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(12))
-abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(16))
-#abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(2021))
+abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(22))
+abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(year=(2020))
 
 print(repositorio_cliente_abonado)
 
