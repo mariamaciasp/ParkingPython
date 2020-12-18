@@ -19,19 +19,56 @@ parking = Parking([],[],[])
 repositorio_vehiculo = vehiculo_repository([])
 repositorio_cliente = cliente_repository([])
 repositorio_cliente_abonado = cliente_abonado_repository([])
+servicio_cliente_abonado = cliente_abonado_service([])
 
-bbdd_abono_repositorio = open("./DataBase/abono", "wb")
-pickle.dump([], bbdd_abono_repositorio)
-bbdd_abono_repositorio.close()
-repositorio_abono = abono_repository()
 
+
+vehiculo_abonado2 = Vehiculo("intento2","coche", 5, "1234", None, None)
+cliente_abonado2 = ClienteAbonado(1, vehiculo_abonado2, "dni1","María","Padilla","tarjeta2","mensual","asfd", [])
+abono_prueba2 = Abono(cliente_abonado2, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado2))
+#repositorio_abono.add_abono(abono_prueba2)
+repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado2)
+vehiculo_abonado_1 = Vehiculo("dfsadf","coche", 5, "1234", None, None)
+cliente_abonado_1 = ClienteAbonado(1, vehiculo_abonado_1, "44243716L","María","Padilla","tarjeta2","mensual","asfd", [])
+abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_1))
+#repositorio_abono.add_abono(abono_prueba)
+repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+
+lista_abonos = [abono_prueba, abono_prueba2]
+
+bbdd_abono_repositorio_w = open("./DataBase/abono", "wb")
+
+pickle.dump(lista_abonos, bbdd_abono_repositorio_w)
+bbdd_abono_repositorio_w.close()
+
+bbdd_abono_repositorio_r = open("./DataBase/abono", "rb")
+
+lista_abonos_bbdd = pickle.load(bbdd_abono_repositorio_r)
+bbdd_abono_repositorio_r.close()
+
+
+repositorio_abono = abono_repository(lista_abonos_bbdd)
+
+vehiculo_abonado_3 = Vehiculo("asfsadf","coche", 5, "1234", None, None)
+cliente_abonado_3 = ClienteAbonado(1, vehiculo_abonado_1, "16L","Margsdfgía","Padilla","tarjeta2","mensual","asfd", [])
+abono_prueba3 = Abono(cliente_abonado_3, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_3))
+#repositorio_abono.add_abono(abono_prueba)
+repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+repositorio_abono.add_abono(abono_prueba3)
+
+print(repositorio_abono)
 repositorio_facturacion = facturacion_abonos_repository([])
 servicio_parking = parking_service(parking, [])
 servicio_parking.asignar_plazas()
-servicio_cliente_abonado = cliente_abonado_service([])
 servicio_abono = abono_service()
-servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","María","Macías","maria@mail.com","tarjeta","trimestral","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
+##servicio_cliente_abonado.dar_alta_abonado(1,"1234abc","dni","María","Macías","maria@mail.com","tarjeta","trimestral","coche", repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
+
+print("entrar")
+print(repositorio_abono.buscar_abono("dni1"))
+print("entrar")
+print()
 print(repositorio_cliente_abonado)
+print("mierda")
 
 print(parking)
 servicio_parking.ingresar_vehiculo_abonado("1234abc","dni",repositorio_cliente_abonado)
@@ -49,6 +86,7 @@ print("mirar diferencia")
 print(repositorio_cliente_abonado)
 servicio_cliente_abonado.modificar_datos_abonado("dni", "dni2", "Pepe", "Botella", "nuevaTarjeta", "nuevoEmail",repositorio_cliente_abonado)
 print(repositorio_cliente_abonado)
+print("caracola")
 print(parking)
 servicio_parking.retirar_vehiculo_abonado("1234abc",1,"1234", repositorio_cliente_abonado)
 
@@ -67,6 +105,9 @@ cliente_abonado_1 = ClienteAbonado(1, vehiculo_abonado_1, "44243716L","María","
 abono_prueba = Abono(cliente_abonado_1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado_1))
 repositorio_abono.add_abono(abono_prueba)
 repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+repositorio_cliente_abonado.add_cliente_abonado(cliente_abonado_1)
+print(repositorio_abono.buscar_abono("44243716L"))
+print("caracola")
 
 abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(month=(12))
 abono_prueba.fecha_cancelacion = abono_prueba.fecha_cancelacion.replace(day=(1))
@@ -80,7 +121,10 @@ print(repositorio_cliente_abonado)
 print("aqui")
 print(repositorio_abono)
 ##servicio_cliente_abonado.baja_abono("dni2", repositorio_abono, repositorio_cliente_abonado, repositorio_facturacion)
-repositorio_abono.borrar_abono("dni2")
+print("es")
+print(repositorio_abono.buscar_abono("dni"))
+#repositorio_abono.borrar_abono("dni2")
+print("creo1")
 print("ahora")
 ##print(repositorio_abono)
 print()
