@@ -3,6 +3,8 @@ from Models.Vehiculo import Vehiculo
 from Models.ClienteAbonado import ClienteAbonado
 from Models.Abono import Abono
 from Models.FacturacionAbonos import FacturacionAbonos
+from Service.vehiculo_service import vehiculo_service
+import pickle
 
 class cliente_abonado_service():
     def __init__(self, abonados):
@@ -23,9 +25,10 @@ class cliente_abonado_service():
 
     def dar_alta_abonado(self, id_cliente, matricula, dni, nombre, apellidos, email, tarjeta, tipo_abono, tipo_plaza,
                          cliente_abonado_repositorio, abono_repositorio, servicio_parking, vehiculo_repositorio):
+        servicio_vehiculo = vehiculo_service()
 
         if(servicio_parking.plaza_disponible(tipo_plaza)!= -1):
-            nuevo_vehiculo = Vehiculo(matricula, tipo_plaza, servicio_parking.plaza_disponible(tipo_plaza),"1234", None, None)
+            nuevo_vehiculo = Vehiculo(matricula, tipo_plaza, servicio_parking.plaza_disponible(tipo_plaza),servicio_vehiculo.calcular_pin(), None, None)
             nuevo_cliente_abonado = ClienteAbonado(id_cliente, nuevo_vehiculo, dni, nombre, apellidos, tarjeta, tipo_abono, email,)
             nuevo_abono = Abono(nuevo_cliente_abonado, datetime.now(), self.calcular_fecha_cancelacion(tipo_abono, datetime.now(), nuevo_cliente_abonado))
 
@@ -124,6 +127,9 @@ class cliente_abonado_service():
             cliente.apellidos = apellidos
             cliente.num_tarjeta = tarjeta
             cliente.email = email
+            pickle_cliente_abonado = open("./DataBase/cliente_abonado", "wb")
+            pickle.dump(cliente_abonado_repositorio.lista_clientes_abonados, pickle_cliente_abonado)
+            pickle_cliente_abonado.close()
             return True
         else:
             print("Cliente incorrecto")
@@ -132,7 +138,9 @@ class cliente_abonado_service():
     def modificar_abono(self, dni_cliente, abono_repositorio):
         abono = abono_repositorio.buscar_abono(dni_cliente)
         abono.fecha_cancelacion = self.calcular_fecha_cancelacion(abono.cliente.tipo_abono, abono.fecha_cancelacion, abono.cliente)
-        print(abono)
+        pickle_abono = open("./DataBase/abono", "wb")
+        pickle.dump(abono_repositorio.lista_abonos, pickle_abono)
+        pickle_abono.close()
 
     def sumar_array(self, dni_cliente, abono_repositorio):
         cliente_lista_facturacion = abono_repositorio.buscar_abono(dni_cliente).cliente.facturado
@@ -141,7 +149,7 @@ class cliente_abonado_service():
             suma += i
         return suma
 
-    def baja_abono(self, dni_cliente, abono_repositorio, cliente_abonado_repositorio, facturacion_repositorio):
+    def baja_abono(self, dni_cliente, abono_repositorio, cliente_abonado_repositorio, facturacion_repositorio, vehiculo_repositorio):
         cliente_borrar = abono_repositorio.buscar_abono(dni_cliente).cliente
         abono_cliente_borrar = abono_repositorio.buscar_abono(dni_cliente)
         crear_facturacion = FacturacionAbonos(cliente_borrar.dni, cliente_borrar.nombre, cliente_borrar.apellidos,
@@ -150,7 +158,7 @@ class cliente_abonado_service():
         facturacion_repositorio.add_facturacion(crear_facturacion)
         abono_repositorio.borrar_abono(dni_cliente)
         cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)
-        #fataría borrar el vehículo de la lista!!! de vehiculo repository!!!
+        vehiculo_repositorio.borrar_vehiculo(cliente_borrar.vehiculo.matricula)
 
     def consulta_abonos_anual(self):
         anio_actual = datetime.now().year

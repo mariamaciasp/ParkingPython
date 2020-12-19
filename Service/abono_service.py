@@ -129,7 +129,6 @@ class abono_service():
         final_caducidad = fecha_actual + proximos_10_dias
 
         for i in abono_repository.lista_abonos:
-            print(i.fecha_cancelacion)
             if(final_caducidad>=i.fecha_cancelacion>=fecha_actual):
                 lista_caducidad.append(i)
 

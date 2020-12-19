@@ -87,9 +87,9 @@ class parking_service():
         servicio_vehiculo = vehiculo_service()
 
         if (self.plaza_disponible(tipo) != -1):
-            # servicio_vehiculo.calcular_pin()
+            servicio_vehiculo.calcular_pin()
             entrada = datetime.now()
-            nuevo_vehiculo = Vehiculo(matricula, tipo, self.plaza_disponible(tipo), "1234", entrada, None)
+            nuevo_vehiculo = Vehiculo(matricula, tipo, self.plaza_disponible(tipo), servicio_vehiculo.calcular_pin(), entrada, None)
 
             vehiculo_repositorio.add_vehiculo(nuevo_vehiculo)
             longitud_coches = len(self.parking.lista_coches)
