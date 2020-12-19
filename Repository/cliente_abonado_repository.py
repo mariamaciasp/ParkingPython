@@ -1,6 +1,8 @@
+import pickle
+
 class cliente_abonado_repository():
 
-    def __init__(self, lista_clientes_abonados):
+    def __init__(self, lista_clientes_abonados=[]):
         self.__lista_clientes_abonados = lista_clientes_abonados
 
     @property
@@ -11,13 +13,16 @@ class cliente_abonado_repository():
     def lista_clientes_abonados(self, lista_clientes_abonados):
         self.__lista_clientes_abonados = lista_clientes_abonados
 
-    def add_cliente_abonado(self, cliente_abonado):
-        self.lista_clientes_abonados.append(cliente_abonado)
-
     def __str__(self):
         for i in self.lista_clientes_abonados:
             print(i)
         return ""
+
+    def add_cliente_abonado(self, cliente_abonado):
+        self.lista_clientes_abonados.append(cliente_abonado)
+        pickle_cliente_abonado = open("./DataBase/cliente_abonado", "wb")
+        pickle.dump(self.lista_clientes_abonados, pickle_cliente_abonado)
+        pickle_cliente_abonado.close()
 
     def buscar_vehiculo_matricula_dni(self, matricula, dni):
         for i in self.lista_clientes_abonados:
@@ -41,5 +46,8 @@ class cliente_abonado_repository():
         cliente = self.buscar_cliente_dni(dni)
         if(cliente!=None):
             self.lista_clientes_abonados.remove(cliente)
+            pickle_cliente_abonado = open("./DataBase/cliente_abonado", "wb")
+            pickle.dump(self.lista_clientes_abonados, pickle_cliente_abonado)
+            pickle_cliente_abonado.close()
             return True
         return False
