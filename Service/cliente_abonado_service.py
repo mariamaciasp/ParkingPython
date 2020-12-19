@@ -7,7 +7,7 @@ from Service.vehiculo_service import vehiculo_service
 import pickle
 
 class cliente_abonado_service():
-    def __init__(self, abonados):
+    def __init__(self, abonados=[]):
         self.__abonados = abonados
 
     @property
