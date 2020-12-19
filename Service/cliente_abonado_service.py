@@ -150,6 +150,7 @@ class cliente_abonado_service():
         facturacion_repositorio.add_facturacion(crear_facturacion)
         abono_repositorio.borrar_abono(dni_cliente)
         cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)
+        #fataría borrar el vehículo de la lista!!! de vehiculo repository!!!
 
     def consulta_abonos_anual(self):
         anio_actual = datetime.now().year

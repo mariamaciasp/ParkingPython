@@ -34,6 +34,9 @@ class abono_repository():
         abono = self.buscar_abono(dni)
         if( abono != None):
             self.lista_abonos.remove(abono)
+            pickle_abono = open("./DataBase/abono", "wb")
+            pickle.dump(self.lista_abonos, pickle_abono)
+            pickle_abono.close()
             return True
         return False
 

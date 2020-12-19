@@ -1,6 +1,8 @@
+import pickle
+
 class facturacion_abonos_repository():
 
-    def __init__(self, lista_facturacion):
+    def __init__(self, lista_facturacion=[]):
         self.__lista_facturacion = lista_facturacion
 
     @property
@@ -18,3 +20,6 @@ class facturacion_abonos_repository():
 
     def add_facturacion(self, facturacion):
         self.lista_facturacion.append(facturacion)
+        pickle_facturacion = open("./DataBase/facturacion", "wb")
+        pickle.dump(self.lista_facturacion, pickle_facturacion)
+        pickle_facturacion.close()
