@@ -32,7 +32,7 @@ bd_vehiculo_repo_r.close()
 repositorio_vehiculo = vehiculo_repository(lista_vehiculo_db)
 #
 
-servicio_cliente_abonado = cliente_abonado_service([])
+servicio_cliente_abonado = cliente_abonado_service()
 
 cliente_abonado1 = ClienteAbonado(1, vehiculo_abonado1, "44243716L","María","Padilla","tarjeta2","mensual","asfd", [])
 cliente_abonado2 = ClienteAbonado(1, vehiculo_abonado2, "dni1","María","Padilla","tarjeta2","mensual","asfd", [])

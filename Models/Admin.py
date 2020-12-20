@@ -18,3 +18,6 @@ class Admin():
     @password.setter
     def password(self, password):
         self.__password = password
+
+    def __str__(self):
+        return "Usuario: %s, contraseña: %s" %(self.usuario, self.password)
