@@ -28,6 +28,5 @@ class Abono():
     def fecha_cancelacion(self, fecha_cancelacion):
         self.__fecha_cancelacion = fecha_cancelacion
 
-
     def __str__(self):
         return "[%s], %s, %s" %(self.cliente, self.fecha_activacion, self.fecha_cancelacion)

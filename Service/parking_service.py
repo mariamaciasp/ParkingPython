@@ -1,5 +1,6 @@
 from Models.Plaza import Plaza
 from Models.Vehiculo import Vehiculo
+from Models.Ticket import Ticket
 from datetime import datetime
 from Repository.vehiculo_repository import vehiculo_repository
 from Models.Cliente import Cliente
@@ -83,7 +84,7 @@ class parking_service():
 
         return -1
 
-    def ingresar_vehiculo(self, id_cliente, matricula, tipo, vehiculo_repositorio, cliente_repositorio):
+    def ingresar_vehiculo(self, id_cliente, matricula, tipo, vehiculo_repositorio, cliente_repositorio, ticket_repositorio):
         servicio_vehiculo = vehiculo_service()
 
         if (self.plaza_disponible(tipo) != -1):
@@ -112,7 +113,9 @@ class parking_service():
 
             cliente = Cliente(id_cliente, nuevo_vehiculo)
             cliente_repositorio.add_cliente(cliente)
-
+            ticket = Ticket(nuevo_vehiculo.matricula, nuevo_vehiculo.fecha_entrada, nuevo_vehiculo.num_plaza, nuevo_vehiculo.pin)
+            ticket_repositorio.add_ticket(ticket)
+            print(ticket)
         else:
             print("No quedan plazas disponibles de " + tipo + "\n")
 
@@ -123,14 +126,12 @@ class parking_service():
 
         if (buscar_vehiculo != None and buscar_vehiculo.num_plaza == num_plaza and buscar_vehiculo.pin == pin):
             salida = buscar_vehiculo.fecha_salida = datetime.now()
-            print(buscar_vehiculo)
             self.calcular_precio(buscar_vehiculo)
-            print(self.calcular_precio(buscar_vehiculo))
-
+            print(f"El importe de su estancia es de {self.calcular_precio(buscar_vehiculo)} €")
+            print("¡Pago realizado con éxito!\nPuede recoger su vehículo\nQue pase un buen día\n")
             factura_vehiculo = [buscar_vehiculo.fecha_entrada, salida, self.calcular_precio(buscar_vehiculo)]
             self.facturacion_no_abonados.append(factura_vehiculo)
 
-            print(self.facturacion_no_abonados)
             if (buscar_vehiculo.tipo == "coche"):
                 for i in self.parking.lista_coches:
                     if (i.vehiculo == buscar_vehiculo):
@@ -148,6 +149,10 @@ class parking_service():
                     if (i.vehiculo == buscar_vehiculo):
                         i.vehiculo = None
                         i.ocupada = False
+        if buscar_vehiculo.num_plaza != num_plaza:
+            print("Número de plaza incorrecta")
+        if buscar_vehiculo.pin != pin:
+            print("Código pin incorrecto")
 
     def calcular_precio(self, vehiculo):
         precio = 0
@@ -185,6 +190,7 @@ class parking_service():
                 self.parking.lista_motos[vehiculo.num_plaza -longitud_coches -1].ocupada = True
             if(vehiculo.tipo == "minusvalido"):
                 self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = True
+            print("Puede depositar su vehículo\nQue pase un buen día\n")
 
     def retirar_vehiculo_abonado(self, matricula, num_plaza, pin, cliente_abonado_repositorio):
         vehiculo = cliente_abonado_repositorio.buscar_vehiculo_matricula(matricula)
@@ -197,7 +203,9 @@ class parking_service():
                 self.parking.lista_motos[vehiculo.num_plaza -longitud_coches -1].ocupada = False
             if(vehiculo.tipo == "minusvalido"):
                 self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = False
-
+            print("Datos introducidos correctamente\nPuede retirar su vehículo\n")
+        else:
+            print("Datos incorrectos\n")
 
     def consultar_facturacion_fechas(self, fecha1, fecha2):
         lista_facturacion_fechas = []

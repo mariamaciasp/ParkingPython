@@ -28,6 +28,7 @@ class cliente_abonado_repository():
         for i in self.lista_clientes_abonados:
             if(i.dni == dni and i.vehiculo.matricula == matricula):
                 return i.vehiculo
+        print("Datos introducidos incorrectos\n")
         return None
 
     def buscar_vehiculo_matricula(self, matricula):

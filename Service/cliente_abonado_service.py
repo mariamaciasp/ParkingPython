@@ -137,10 +137,16 @@ class cliente_abonado_service():
 
     def modificar_abono(self, dni_cliente, abono_repositorio):
         abono = abono_repositorio.buscar_abono(dni_cliente)
-        abono.fecha_cancelacion = self.calcular_fecha_cancelacion(abono.cliente.tipo_abono, abono.fecha_cancelacion, abono.cliente)
-        pickle_abono = open("./DataBase/abono", "wb")
-        pickle.dump(abono_repositorio.lista_abonos, pickle_abono)
-        pickle_abono.close()
+        if abono != None:
+            abono.fecha_cancelacion = self.calcular_fecha_cancelacion(abono.cliente.tipo_abono, abono.fecha_cancelacion, abono.cliente)
+            pickle_abono = open("./DataBase/abono", "wb")
+            pickle.dump(abono_repositorio.lista_abonos, pickle_abono)
+            pickle_abono.close()
+            print("Abono renovado con éxito\n")
+            return True
+        else:
+            print("DNI incorrecto\n")
+            return False
 
     def sumar_array(self, dni_cliente, abono_repositorio):
         cliente_lista_facturacion = abono_repositorio.buscar_abono(dni_cliente).cliente.facturado
@@ -150,15 +156,19 @@ class cliente_abonado_service():
         return suma
 
     def baja_abono(self, dni_cliente, abono_repositorio, cliente_abonado_repositorio, facturacion_repositorio, vehiculo_repositorio):
-        cliente_borrar = abono_repositorio.buscar_abono(dni_cliente).cliente
-        abono_cliente_borrar = abono_repositorio.buscar_abono(dni_cliente)
-        crear_facturacion = FacturacionAbonos(cliente_borrar.dni, cliente_borrar.nombre, cliente_borrar.apellidos,
-                                              self.sumar_array(dni_cliente, abono_repositorio),
-                                              abono_cliente_borrar.fecha_activacion, abono_cliente_borrar.fecha_cancelacion)
-        facturacion_repositorio.add_facturacion(crear_facturacion)
-        abono_repositorio.borrar_abono(dni_cliente)
-        cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)
-        vehiculo_repositorio.borrar_vehiculo(cliente_borrar.vehiculo.matricula)
+        try:
+            cliente_borrar = abono_repositorio.buscar_abono(dni_cliente).cliente
+            abono_cliente_borrar = abono_repositorio.buscar_abono(dni_cliente)
+            crear_facturacion = FacturacionAbonos(cliente_borrar.dni, cliente_borrar.nombre, cliente_borrar.apellidos,
+                                                  self.sumar_array(dni_cliente, abono_repositorio),
+                                                  abono_cliente_borrar.fecha_activacion, abono_cliente_borrar.fecha_cancelacion)
+            facturacion_repositorio.add_facturacion(crear_facturacion)
+            abono_repositorio.borrar_abono(dni_cliente)
+            cliente_abonado_repositorio.borrar_cliente_dni(dni_cliente)
+            vehiculo_repositorio.borrar_vehiculo(cliente_borrar.vehiculo.matricula)
+            print("Cliente dado de baja con éxito\n")
+        except AttributeError:
+            print("DNI incorrecto\n")
 
     def consulta_abonos_anual(self):
         anio_actual = datetime.now().year

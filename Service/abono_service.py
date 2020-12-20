@@ -136,4 +136,4 @@ class abono_service():
             for i in lista_caducidad:
                 print(i)
         else:
-            print("No existen abonos con esa fecha de caducidad")
+            print("No existen abonos que caduquen en los próximos 10 días")
