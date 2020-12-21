@@ -24,7 +24,7 @@ El programa cuenta con dos usuarios administradores:
 
 - Usuario: maria1, password: 1234
 
-Por último, si necesita hacer alguna comprobación respecto al abonado que ya está introducido en el sistema, necesitará conocer el PIN, para ello lo más sencillo es descomentar la línea 115 del main, así podremos ver todos los abonados dados de alta
+Por último, si necesita hacer alguna comprobación respecto al abonado que ya está introducido en el sistema, necesitará conocer el PIN, para ello lo más sencillo es descomentar la línea 115 del main, así podremos ver todos los abonados dados de alta.
 
 
 
