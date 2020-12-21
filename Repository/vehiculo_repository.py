@@ -28,7 +28,6 @@ class vehiculo_repository():
         for i in self.lista_vehiculos:
             if (i.matricula == matricula):
                 return i
-        print("Matrícula incorrecta")
         return None
 
     def borrar_vehiculo(self, matricula):

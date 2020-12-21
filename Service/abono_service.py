@@ -123,8 +123,8 @@ class abono_service():
         proximos_10_dias = timedelta(days=10)
         lista_caducidad = []
         fecha_actual = datetime.now()
-        #fecha_actual = fecha_actual.replace(day=21)
-        #fecha_actual = fecha_actual.replace(month=12)
+        #fecha_actual = fecha_actual.replace(day=20)
+        #fecha_actual = fecha_actual.replace(month=1)
         #fecha_actual = fecha_actual.replace(year=2021)
         final_caducidad = fecha_actual + proximos_10_dias
 

@@ -5,6 +5,7 @@ from Models.Abono import Abono
 from Models.FacturacionAbonos import FacturacionAbonos
 from Service.vehiculo_service import vehiculo_service
 import pickle
+import locale
 
 class cliente_abonado_service():
     def __init__(self, abonados=[]):
@@ -142,10 +143,10 @@ class cliente_abonado_service():
             pickle_abono = open("./DataBase/abono", "wb")
             pickle.dump(abono_repositorio.lista_abonos, pickle_abono)
             pickle_abono.close()
-            print("Abono renovado con éxito\n")
+            print("Abono renovado con éxito")
             return True
         else:
-            print("DNI incorrecto\n")
+            print("DNI incorrecto")
             return False
 
     def sumar_array(self, dni_cliente, abono_repositorio):
@@ -173,9 +174,11 @@ class cliente_abonado_service():
     def consulta_abonos_anual(self):
         anio_actual = datetime.now().year
         lista_anuales = []
+        locale.setlocale(locale.LC_ALL, 'es-ES')
 
         for i in self.abonados:
             if(i[1].year == anio_actual):
+                i[1] = (i[1].strftime("%d / %m / %Y - %H:%M"))  # %I 12h - %H 24h
                 lista_anuales.append(i)
 
         if(len(lista_anuales) != 0):

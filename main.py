@@ -54,9 +54,9 @@ repositorio_vehiculo = vehiculo_repository(lista_vehiculo_db)
 #
 
 #Repo cliente abonado
-cliente_abonado1 = ClienteAbonado(1, vehiculo_abonado1, "44243716L","María","Padilla","tarjeta1","mensual","mail", [])
-cliente_abonado2 = ClienteAbonado(1, vehiculo_abonado2, "dni_abonado2","Pepe","Acosta","tarjeta2","mensual","mail", [])
-lista_clientes_abonados = [cliente_abonado1, cliente_abonado2]
+#cliente_abonado1 = ClienteAbonado(1, vehiculo_abonado1, "44243716L","María","Padilla","tarjeta1","mensual","mail", [])
+#cliente_abonado2 = ClienteAbonado(1, vehiculo_abonado2, "dni_abonado2","Pepe","Acosta","tarjeta2","mensual","mail", [])
+lista_clientes_abonados = [] #cliente_abonado1, cliente_abonado2
 
 bd_cliente_abonado_repo_w = open("./DataBase/cliente_abonado", "wb")
 pickle.dump(lista_clientes_abonados, bd_cliente_abonado_repo_w)
@@ -68,9 +68,9 @@ repositorio_cliente_abonado = cliente_abonado_repository(lista_clientes_abonados
 #
 
 # Repo abono
-abono_cliente1 = Abono(cliente_abonado1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado1))
-abono_cliente2 = Abono(cliente_abonado2, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado2))
-lista_abonos = [abono_cliente1, abono_cliente2]
+#abono_cliente1 = Abono(cliente_abonado1, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado1))
+#abono_cliente2 = Abono(cliente_abonado2, datetime.now(), servicio_cliente_abonado.calcular_fecha_cancelacion("mensual", datetime.now(), cliente_abonado2))
+lista_abonos = [] #abono_cliente1, abono_cliente2
 
 bd_abono_repo_w = open("./DataBase/abono", "wb")
 pickle.dump(lista_abonos, bd_abono_repo_w)
@@ -110,6 +110,7 @@ servicio_cliente_abonado.dar_alta_abonado(0,"1234abc","dni","María","Macías","
    #                                       cliente_abonado2.apellidos, cliente_abonado2.email, cliente_abonado2.num_tarjeta,
     #                                      cliente_abonado2.tipo_abono, cliente_abonado2.vehiculo.tipo, repositorio_cliente_abonado, repositorio_abono, servicio_parking, repositorio_vehiculo)
 
+
 # Comentar, puesto para saber pin de los abonados dados de alta
 #print(repositorio_vehiculo)
 
@@ -142,7 +143,8 @@ while True:
                                     print("Opción incorrecta")
                             except ValueError:
                                 print("Introduzca un valor numérico\n")
-                        servicio_parking.ingresar_vehiculo(id, matricula, tipo, repositorio_vehiculo, repositorio_cliente, repositorio_ticket)
+                        servicio_parking.ingresar_vehiculo(id, matricula, tipo, repositorio_vehiculo, repositorio_cliente, repositorio_ticket,
+                                                           repositorio_cliente_abonado)
                         break
                     elif zona_cliente == 2:
                         retirar_matricula = input("Introduzca la matrícula del vehículo\n")
@@ -181,6 +183,7 @@ while True:
                                 break
                             except ValueError:
                                 print("Pin incorrecto. Introduzca un número\n")
+
                         servicio_parking.retirar_vehiculo_abonado(retirar_abonado_matricula, id_plaza_abonado, retirar_pin_abonado, repositorio_cliente_abonado)
                         break
                     elif zona_cliente == 0:
@@ -207,7 +210,6 @@ while True:
 
                         if opcion_admin == 1:
                             servicio_parking.consultar_estado_parking()
-                            print()
                         elif opcion_admin == 2:
                             while True:
                                 try:
@@ -226,12 +228,11 @@ while True:
                                     minuto2 = int(input("Minuto "))
                                     fecha2 = datetime(anio2, mes2, dia2, hora2, minuto2)
                                     #hay que formatear esa fecha y ponerla legible, poner el array legible
+                                    print(fecha1, "-",fecha2)
                                     servicio_parking.consultar_facturacion_fechas(fecha1, fecha2)
-                                    print(fecha1, fecha2)
-                                    print()
                                     break
                                 except ValueError:
-                                    print("Introduzca un valor numérico\n")
+                                    print("Introduzca un valor numérico y fecha existente\n")
                         elif opcion_admin == 3:
                             print("Abonos anuales:")
                             servicio_cliente_abonado.consulta_abonos_anual()
@@ -336,7 +337,7 @@ while True:
                                 else:
                                     print("Opción incorrecta\n")
                         elif opcion_admin == 6:
-                            print("Matrícula de los últimos 3 vehículos ingresados en el parking:")
+                            print("Matrículas de los últimos 3 vehículos ingresados en el parking:")
                             repositorio_imagen.leer_imagen()
                             #repositorio_imagen.leer_imagen2()
 

@@ -84,96 +84,114 @@ class parking_service():
 
         return -1
 
-    def ingresar_vehiculo(self, id_cliente, matricula, tipo, vehiculo_repositorio, cliente_repositorio, ticket_repositorio):
+    def ingresar_vehiculo(self, id_cliente, matricula, tipo, vehiculo_repositorio, cliente_repositorio, ticket_repositorio,
+                          cliente_abonado_repositorio):
         servicio_vehiculo = vehiculo_service()
+        vehiculo_abonado = cliente_abonado_repositorio.buscar_vehiculo_matricula(matricula)
 
-        if (self.plaza_disponible(tipo) != -1):
-            servicio_vehiculo.calcular_pin()
-            entrada = datetime.now()
-            nuevo_vehiculo = Vehiculo(matricula, tipo, self.plaza_disponible(tipo), servicio_vehiculo.calcular_pin(), entrada, None)
+        if(vehiculo_abonado == None):
+            if (self.plaza_disponible(tipo) != -1):
+                servicio_vehiculo.calcular_pin()
+                entrada = datetime.now()
+                nuevo_vehiculo = Vehiculo(matricula, tipo, self.plaza_disponible(tipo), servicio_vehiculo.calcular_pin(), entrada, None)
 
-            vehiculo_repositorio.add_vehiculo(nuevo_vehiculo)
-            longitud_coches = len(self.parking.lista_coches)
-            longitud_motos = len(self.parking.lista_motos)
-            if (tipo == "coche"):
-                self.parking.lista_coches[nuevo_vehiculo.num_plaza - 1].vehiculo = nuevo_vehiculo
-                self.parking.lista_coches[nuevo_vehiculo.num_plaza - 1].ocupada = True
+                vehiculo_repositorio.add_vehiculo(nuevo_vehiculo)
+                longitud_coches = len(self.parking.lista_coches)
+                longitud_motos = len(self.parking.lista_motos)
+                if (tipo == "coche"):
+                    self.parking.lista_coches[nuevo_vehiculo.num_plaza - 1].vehiculo = nuevo_vehiculo
+                    self.parking.lista_coches[nuevo_vehiculo.num_plaza - 1].ocupada = True
 
-            elif (tipo == "moto"):
-                self.parking.lista_motos[nuevo_vehiculo.num_plaza - longitud_coches - 1].vehiculo = nuevo_vehiculo
-                self.parking.lista_motos[nuevo_vehiculo.num_plaza - longitud_coches - 1].ocupada = True
+                elif (tipo == "moto"):
+                    self.parking.lista_motos[nuevo_vehiculo.num_plaza - longitud_coches - 1].vehiculo = nuevo_vehiculo
+                    self.parking.lista_motos[nuevo_vehiculo.num_plaza - longitud_coches - 1].ocupada = True
 
-            elif (tipo == "minusvalido"):
-                self.parking.lista_minusvalidos[
-                    nuevo_vehiculo.num_plaza - longitud_coches - longitud_motos - 1].vehiculo = nuevo_vehiculo
-                self.parking.lista_minusvalidos[
-                    nuevo_vehiculo.num_plaza - longitud_coches - longitud_motos - 1].ocupada = True
+                elif (tipo == "minusvalido"):
+                    self.parking.lista_minusvalidos[
+                        nuevo_vehiculo.num_plaza - longitud_coches - longitud_motos - 1].vehiculo = nuevo_vehiculo
+                    self.parking.lista_minusvalidos[
+                        nuevo_vehiculo.num_plaza - longitud_coches - longitud_motos - 1].ocupada = True
+                else:
+                    print("Tipo incorrecto")
+
+                cliente = Cliente(id_cliente, nuevo_vehiculo)
+                cliente_repositorio.add_cliente(cliente)
+                ticket = Ticket(nuevo_vehiculo.matricula, nuevo_vehiculo.fecha_entrada, nuevo_vehiculo.num_plaza, nuevo_vehiculo.pin)
+                ticket_repositorio.add_ticket(ticket)
+                print(ticket)
             else:
-                print("Tipo incorrecto")
-
-            cliente = Cliente(id_cliente, nuevo_vehiculo)
-            cliente_repositorio.add_cliente(cliente)
-            ticket = Ticket(nuevo_vehiculo.matricula, nuevo_vehiculo.fecha_entrada, nuevo_vehiculo.num_plaza, nuevo_vehiculo.pin)
-            ticket_repositorio.add_ticket(ticket)
-            print(ticket)
+                print("No quedan plazas disponibles de " + tipo + "\n")
         else:
-            print("No quedan plazas disponibles de " + tipo + "\n")
+            print("El vehículo que intenta depositar es abonado")
 
 
     def retirar_vehiculo(self, matricula, num_plaza, pin, vehiculo_repositorio):
 
         buscar_vehiculo = vehiculo_repositorio.buscar_vehiculo_matricula(matricula)
+        try:
+            if (buscar_vehiculo != None and buscar_vehiculo.num_plaza == num_plaza and buscar_vehiculo.pin == pin
+                and buscar_vehiculo.fecha_entrada != None):
+                salida = buscar_vehiculo.fecha_salida = datetime.now()
+                self.calcular_precio(buscar_vehiculo)
+                print(f"El importe de su estancia es de {self.calcular_precio(buscar_vehiculo)} €")
+                print("¡Pago realizado con éxito!\nPuede recoger su vehículo\nQue pase un buen día\n")
+                factura_vehiculo = [buscar_vehiculo.fecha_entrada, salida, self.calcular_precio(buscar_vehiculo)]
+                self.facturacion_no_abonados.append(factura_vehiculo)
 
-        if (buscar_vehiculo != None and buscar_vehiculo.num_plaza == num_plaza and buscar_vehiculo.pin == pin):
-            salida = buscar_vehiculo.fecha_salida = datetime.now()
-            self.calcular_precio(buscar_vehiculo)
-            print(f"El importe de su estancia es de {self.calcular_precio(buscar_vehiculo)} €")
-            print("¡Pago realizado con éxito!\nPuede recoger su vehículo\nQue pase un buen día\n")
-            factura_vehiculo = [buscar_vehiculo.fecha_entrada, salida, self.calcular_precio(buscar_vehiculo)]
-            self.facturacion_no_abonados.append(factura_vehiculo)
+                if (buscar_vehiculo.tipo == "coche"):
+                    for i in self.parking.lista_coches:
+                        if (i.vehiculo == buscar_vehiculo):
+                            i.vehiculo = None
+                            i.ocupada = False
 
-            if (buscar_vehiculo.tipo == "coche"):
-                for i in self.parking.lista_coches:
-                    if (i.vehiculo == buscar_vehiculo):
-                        i.vehiculo = None
-                        i.ocupada = False
+                if (buscar_vehiculo.tipo == "moto"):
+                    for i in self.parking.lista_motos:
+                        if (i.vehiculo == buscar_vehiculo):
+                            i.vehiculo = None
+                            i.ocupada = False
 
-            if (buscar_vehiculo.tipo == "moto"):
-                for i in self.parking.lista_motos:
-                    if (i.vehiculo == buscar_vehiculo):
-                        i.vehiculo = None
-                        i.ocupada = False
+                if (buscar_vehiculo.tipo == "minusvalido"):
+                    for i in self.parking.lista_minusvalidos:
+                        if (i.vehiculo == buscar_vehiculo):
+                            i.vehiculo = None
+                            i.ocupada = False
 
-            if (buscar_vehiculo.tipo == "minusvalido"):
-                for i in self.parking.lista_minusvalidos:
-                    if (i.vehiculo == buscar_vehiculo):
-                        i.vehiculo = None
-                        i.ocupada = False
-        if buscar_vehiculo.num_plaza != num_plaza:
-            print("Número de plaza incorrecta")
-        if buscar_vehiculo.pin != pin:
-            print("Código pin incorrecto")
+            if buscar_vehiculo == None:
+                print("Matrícula incorrecta")
+            if buscar_vehiculo.num_plaza != num_plaza:
+                print("Número de plaza incorrecta")
+            if buscar_vehiculo.pin != pin:
+                print("Código pin incorrecto")
+            if buscar_vehiculo.fecha_entrada == None:
+                print("Error intenta sacar un vehículo abonado desde no abonado")
+        except AttributeError:
+            print("Error de datos")
+
 
     def calcular_precio(self, vehiculo):
-        precio = 0
-        tiempo = vehiculo.fecha_salida - vehiculo.fecha_entrada
 
-        minutos = round((tiempo.seconds % 3600) / 60)
+        try:
+            precio = 0
+            tiempo = vehiculo.fecha_salida - vehiculo.fecha_entrada
 
-        if (vehiculo.tipo == "coche"):
-            precio = 0.12
+            minutos = round((tiempo.seconds % 3600) / 60)
 
-        elif (vehiculo.tipo == "moto"):
-            precio = 0.08
+            if (vehiculo.tipo == "coche"):
+                precio = 0.12
 
-        elif (vehiculo.tipo == "minusvalido"):
-            precio = 0.10
+            elif (vehiculo.tipo == "moto"):
+                precio = 0.08
 
-        precio_total = round(precio * minutos,2)
+            elif (vehiculo.tipo == "minusvalido"):
+                precio = 0.10
 
-        #self.facturacion_no_abonados.append(precio_total)
+            precio_total = round(precio * minutos,2)
 
-        return precio_total
+            #self.facturacion_no_abonados.append(precio_total)
+
+            return precio_total
+        except TypeError:
+            print("Error intenta sacar un vehículo abonado desde no abonado")
 
 
     def ingresar_vehiculo_abonado(self, matricula, dni, cliente_abonado_repositorio):
@@ -190,13 +208,25 @@ class parking_service():
                 self.parking.lista_motos[vehiculo.num_plaza -longitud_coches -1].ocupada = True
             if(vehiculo.tipo == "minusvalido"):
                 self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = True
-            print("Puede depositar su vehículo\nQue pase un buen día\n")
+            print("Puede depositar su vehículo\nQue pase un buen día")
 
     def retirar_vehiculo_abonado(self, matricula, num_plaza, pin, cliente_abonado_repositorio):
         vehiculo = cliente_abonado_repositorio.buscar_vehiculo_matricula(matricula)
         longitud_coches = len(self.parking.lista_coches)
         longitud_motos = len(self.parking.lista_motos)
-        if(vehiculo != None and vehiculo.pin == pin and vehiculo.num_plaza == num_plaza):
+        comprobar_ingreso = False
+
+        for i in self.parking.lista_coches:
+            if (i.ocupada == True and i.vehiculo.matricula == matricula):
+                comprobar_ingreso = True
+        for i in self.parking.lista_motos:
+            if (i.ocupada == True and i.vehiculo.matricula == matricula):
+                comprobar_ingreso = True
+        for i in self.parking.lista_minusvalidos:
+            if (i.ocupada == True and i.vehiculo.matricula == matricula):
+                comprobar_ingreso = True
+
+        if(vehiculo != None and vehiculo.pin == pin and vehiculo.num_plaza == num_plaza and comprobar_ingreso == True):
             if(vehiculo.tipo == "coche"):
                 self.parking.lista_coches[vehiculo.num_plaza -1].ocupada = False
             if(vehiculo.tipo == "moto"):
@@ -204,6 +234,8 @@ class parking_service():
             if(vehiculo.tipo == "minusvalido"):
                 self.parking.lista_minusvalidos[vehiculo.num_plaza -longitud_coches -longitud_motos -1].ocupada = False
             print("Datos introducidos correctamente\nPuede retirar su vehículo\n")
+        elif (comprobar_ingreso == False):
+            print("Su vehículo no está dentro del parking")
         else:
             print("Datos incorrectos\n")
 
