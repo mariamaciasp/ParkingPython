@@ -6,7 +6,7 @@ El parking cuenta con dos zonas:
 
 1- Zona cliente: Aquí podremos insertar y retirar vehículos de clientes abonados y normales.
 
-2- Zona administrador: Podremos realizar las consultas relacionadas con el parking, entre ellas podemos encontrar consultar estado del parking, facturación del mismo, consulta abonos anuales, gestionar los diferentes abonos (alta, baja y modificar (abono o datos abonados), consultar caducidad de abonos tanto mensual como en los próximos 10 días). Por último, he agregado una opción de consulta de imágenes, en ella se leerás las imagenes tomadas de los tres últimos vehículos ingresados en el parking (estas imagenes están ya introducidas en el directorio "Imagenes")
+2- Zona administrador: Podremos realizar las consultas relacionadas con el parking, entre ellas podemos encontrar consultar estado del parking, facturación del mismo, consulta abonos anuales, gestionar los diferentes abonos alta, baja y modificar (abono o datos abonados), consultar caducidad de abonos tanto mensual como en los próximos 10 días). Por último, he agregado una opción de consulta de imágenes, en ella se leerás las imagenes tomadas de los tres últimos vehículos ingresados en el parking (estas imagenes están ya introducidas en el directorio "Imagenes")
 
 ## ANOTACIONES IMPORTANTES:
 
