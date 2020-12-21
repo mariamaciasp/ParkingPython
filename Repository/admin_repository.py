@@ -27,6 +27,5 @@ class admin_repository():
     def buscar_admin(self, usuario, password):
         for i in self.lista_admin:
             if(i.usuario == usuario and i.password == password):
-                print("Sesión iniciada con éxito")
                 return i
         return None

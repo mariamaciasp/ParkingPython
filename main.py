@@ -184,7 +184,7 @@ while True:
                         servicio_parking.retirar_vehiculo_abonado(retirar_abonado_matricula, id_plaza_abonado, retirar_pin_abonado, repositorio_cliente_abonado)
                         break
                     elif zona_cliente == 0:
-                        print("Volver..\n")
+                        print("Volviendo..\n")
                         break
                     else:
                         print("Opción incorrecta\n")
@@ -198,6 +198,7 @@ while True:
             inicio_sesion = repositorio_admin.buscar_admin(usuario, password)
 
             if(inicio_sesion!=None):
+                print("Sesión iniciada con éxito")
                 while True:
                     try:
                         opcion_admin = int(input("\nSeleccione la opción que desee:\n1- Consultar estado parking \n2- Facturación \n"
@@ -337,6 +338,7 @@ while True:
                         elif opcion_admin == 6:
                             print("Matrícula de los últimos 3 vehículos ingresados en el parking:")
                             repositorio_imagen.leer_imagen()
+                            #repositorio_imagen.leer_imagen2()
 
                         elif opcion_admin == 0:
                             print("Saliendo..\n")
@@ -351,8 +353,15 @@ while True:
 
 
         elif opcion == 0:
-            print("Cerrando..")
-            break
+            usuario = input("Introduzca administrador:\n")
+            password = input("Introduzca contraseña administrador:\n")
+            cerrar_sesion = repositorio_admin.buscar_admin(usuario, password)
+
+            if(cerrar_sesion!=None):
+                print("Cerrando..")
+                break
+            else:
+                print("Administrador incorrecto\n")
         else:
             print("Opción incorrecta\n")
     except ValueError:
